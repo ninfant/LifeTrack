@@ -5,14 +5,17 @@ import {
   gethabitbyid,
   deletehabitbyid,
   updatehabitbyid,
-} from "../controllers/habits.js";
+  logHabitCompletion,
+  getHabitStreak,
+} from "../controllers/habitsController.js";
 
 const router = express.Router();
 
 router.post("/create", createHabits);
-router.get("/getall", getallhabits);
+router.get("/getall/:userId", getallhabits);
 router.get("/get/:id", gethabitbyid);
 router.delete("/delete/:id", deletehabitbyid);
 router.put("/update/:id", updatehabitbyid);
-
+router.post("/log-completion/:id", logHabitCompletion);
+router.get("/get-streak/:id", getHabitStreak);
 export default router;
