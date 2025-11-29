@@ -17,16 +17,15 @@ describe("createHabits", () => {
   beforeEach(() => {
     req = { body: {} };
     res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: jest.fn().mockReturnThis(), //crea funciones mock para el status y el json
+      json: jest.fn(), //crea funciones mock para el json
     };
-    // Crear spy del método create
-    createSpy = jest.spyOn(Habits, "create");
+
+    createSpy = jest.spyOn(Habits, "create"); //espiamos el metodo create de la clase Habits
   });
 
   afterEach(() => {
-    // Restaurar mocks después de cada test
-    jest.restoreAllMocks();
+    jest.restoreAllMocks(); //restaura los mocks después de cada test
   });
 
   it("debe crear un hábito exitosamente", async () => {
@@ -35,23 +34,24 @@ describe("createHabits", () => {
       description: "30 minutos diarios",
       userId: "123",
     };
-
+    //respuesta simulada de la BD
     const mockHabit = {
       _id: "456",
       name: req.body.name,
       description: req.body.description,
       userId: req.body.userId,
     };
-
+    //hace que el spy devuelva una promesa resuelta
     createSpy.mockResolvedValue(mockHabit);
 
     await createHabits(req, res);
-
+    //verifica que el spy haya sido llamado con los argumentos correctos
     expect(createSpy).toHaveBeenCalledWith({
       name: req.body.name,
       description: req.body.description,
       userId: req.body.userId,
     });
+    //verifica que el status y el json hayan sido llamados con los argumentos correctos
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({

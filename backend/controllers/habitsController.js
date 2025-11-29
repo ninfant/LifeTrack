@@ -97,31 +97,31 @@ export const logHabitCompletion = async (req, res) => {
       const cDate = new Date(c.date);
       cDate.setHours(0, 0, 0, 0);
       return cDate.getTime() === completionDate.getTime();
-    });
+    }); //existingIndex = el indice del registro que ya existe o -1 si no existe
 
     if (existingIndex !== -1) {
-      // Si existe, actualizar
-      habit.completions[existingIndex].completed = completed;
+      habit.completions[existingIndex].completed = completed; // Si existe, actualizar
     } else {
       // Si no existe, agregar nuevo
       habit.completions.push({
         date: completionDate,
         completed: completed !== undefined ? completed : true,
-      });
+      }); /** si el registro SI se envia(!== undefined ), es decir ya sea true o false la variable completed lo toma,
+       si no se envio, se completa el registro por defecto con true, esto es para que se pueda marcar el día como completado 
+      * */
     }
 
-    await habit.save();
+    await habit.save(); //guardamos el habit en la base de datos
 
-    res.status(200).json({
-      message: "Habit completion logged successfully",
-      habit,
-    });
+    res
+      .status(200)
+      .json({ message: "Habit completion logged successfully", habit }); //respuesta exitosa
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: "Internal server error", error }); //respuesta de error
   }
 };
 
-//GET HABIT STREAK
+//GET HABIT STREAK(racha de días completados)
 export const getHabitStreak = async (req, res) => {
   const { id } = req.params;
   try {
@@ -130,31 +130,32 @@ export const getHabitStreak = async (req, res) => {
       return res.status(404).json({ message: "Habit not found" });
     }
 
-    // Solo días completados, ordenados por fecha
+    // Solo días completados,transformados a números y ordenados por fecha
     const completedDates = habit.completions
       .filter((c) => c.completed === true)
       .map((c) => {
-        const d = new Date(c.date);
-        d.setHours(0, 0, 0, 0);
-        return d.getTime(); // Convertir a número para comparar fácil
+        const d = new Date(c.date); //"2024-01-15" => "2024-01-15T00:00:03:333Z"
+        d.setHours(0, 0, 0, 0); //"2024-01-15T00:00:03:333Z" => "2024-01-15T00:00:00:000Z"
+        return d.getTime(); // => 1736937600000 //transformar a número para comparar fácil
       })
       .sort((a, b) => b - a); // Más reciente primero
 
     // Current Streak: desde hoy hacia atrás
-    const today = new Date();
+    const today = new Date(); //
     today.setHours(0, 0, 0, 0);
-    const todayTime = today.getTime();
+    const todayTime = today.getTime(); // => 1337203200000 //transformar a número para comparar fácil
 
     let currentStreak = 0;
     let checkDate = todayTime;
 
+    //calcula la racha actual contando días consecutivos completados desde hoy hacia atrás.si hay un gap, rompe la racha.
     for (const completedTime of completedDates) {
       const daysDiff = (checkDate - completedTime) / (1000 * 60 * 60 * 24);
 
       if (daysDiff === 0) {
         // Este día está completado
-        currentStreak++;
-        checkDate -= 86400000; // Restar 1 día (en milisegundos)
+        currentStreak++; //incrementar la racha
+        checkDate -= 86400000; // Retroceder el checkDate 1 día (en milisegundos)
       } else if (daysDiff > 0) {
         // Hay un gap, rompe la racha
         break;

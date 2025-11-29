@@ -14,6 +14,7 @@ const habitsSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  //completions es un array de objetos con date y completed
   completions: [
     {
       date: Date,
