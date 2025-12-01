@@ -78,14 +78,15 @@ export const updatehabitbyid = async (req, res) => {
 };
 
 // Helper functions para normalización de fechas
-// Normaliza una fecha a medianoche (00:00:00)
+
+//Normalice the date to (00:00:00)
 const normalizeDate = (date) => {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
   return d;
 };
 
-// Normaliza completions: convierte fechas a objetos con dateTime normalizado
+// Normalize completions: convert dates to objects with normalized dateTime
 const normalizeCompletions = (completions) => {
   return completions.map((c) => {
     const d = normalizeDate(c.date);
@@ -139,7 +140,7 @@ export const logHabitCompletion = async (req, res) => {
   }
 };
 
-// Extrae solo las fechas completadas ordenadas (más reciente primero)
+// Extract only the completed dates sorted (most recent first)
 const getCompletedDates = (normalizedCompletions) => {
   return normalizedCompletions
     .filter((c) => c.completed === true)
@@ -147,7 +148,7 @@ const getCompletedDates = (normalizedCompletions) => {
     .sort((a, b) => b - a);
 };
 
-// Calcula las rachas (current y longest)
+// Calculate streaks (current and longest)
 const calculateStreaks = (completedDates) => {
   const today = normalizeDate(new Date());
   const todayTime = today.getTime();
@@ -231,7 +232,7 @@ const calculateOverallStats = (completedDates, habit) => {
   };
 };
 
-//GET HABIT STREAK - Solo rachas (más ligero)
+//GET HABIT STREAK - Only streaks (lighter)
 export const getHabitStreak = async (req, res) => {
   const { id } = req.params;
   try {
@@ -254,7 +255,7 @@ export const getHabitStreak = async (req, res) => {
   }
 };
 
-//GET HABIT STATS - Estadísticas completas (streak + progreso + overall)
+//GET HABIT STATS - Complete statistics (streak + progress + overall)
 export const getHabitStats = async (req, res) => {
   const { id } = req.params;
   const { period = "week" } = req.query;
@@ -268,7 +269,7 @@ export const getHabitStats = async (req, res) => {
     const normalizedCompletions = normalizeCompletions(habit.completions);
     const completedDates = getCompletedDates(normalizedCompletions);
 
-    // Calcular todas las estadísticas usando helpers
+    // Calculate all statistics using helpers
     const streaks = calculateStreaks(completedDates);
     const progress = calculateProgress(normalizedCompletions, period);
     const overall = calculateOverallStats(completedDates, habit);

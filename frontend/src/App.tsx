@@ -31,7 +31,6 @@ function App() {
           <Route path="/habits/:id" element={<HabitDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile user={user} />} />
-          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </Layout>
     </BrowserRouter>

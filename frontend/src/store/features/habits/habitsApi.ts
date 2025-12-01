@@ -32,8 +32,9 @@ export const habitsApi = createApi({
     createHabit: builder.mutation({
       query: (habitData: {
         name: string;
-        description: string;
         userId: string;
+        category: string;
+        objective: string;
       }) => ({
         url: "/api/habits/create",
         method: "POST",
@@ -49,7 +50,8 @@ export const habitsApi = createApi({
       }: {
         id: string;
         name?: string;
-        description?: string;
+        category?: string;
+        objective?: string;
         completed?: boolean;
       }) => ({
         url: `/api/habits/update/${id}`,

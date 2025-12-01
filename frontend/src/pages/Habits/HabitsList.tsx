@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useGetHabitsQuery,
   useCreateHabitMutation,
   useDeleteHabitMutation,
-  useUpdateHabitMutation,
 } from "../../store/features/habits/habitsApi";
 
 interface HabitsListProps {
@@ -12,20 +12,21 @@ interface HabitsListProps {
 }
 
 const HabitsList = ({ userId }: HabitsListProps) => {
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
+    category: "",
+    objective: "",
   });
 
   // Query: Obtener hábitos (automático)
   const { data, isLoading, isError, error, refetch } =
     useGetHabitsQuery(userId);
 
-  // Mutations: Crear, actualizar, eliminar
+  // Mutations: Crear, eliminar
   const [createHabit, { isLoading: isCreating }] = useCreateHabitMutation();
   const [deleteHabit, { isLoading: isDeleting }] = useDeleteHabitMutation();
-  const [updateHabit, { isLoading: isUpdating }] = useUpdateHabitMutation();
 
   // Handler para crear hábito
   const handleCreate = async (e: FormEvent) => {
@@ -37,7 +38,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
       }).unwrap();
 
       // Limpiar formulario y cerrar
-      setFormData({ name: "", description: "" });
+      setFormData({ name: "", category: "", objective: "" });
       setShowForm(false);
     } catch (err) {
       console.error("Error creando hábito:", err);
@@ -114,13 +115,27 @@ const HabitsList = ({ userId }: HabitsListProps) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Descripción</label>
-            <textarea
-              value={formData.description}
+            <label className="block mb-2 font-semibold">Categoría</label>
+            <input
+              type="text"
+              value={formData.category}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData({ ...formData, category: e.target.value })
               }
               className="w-full px-3 py-2 border rounded"
+              placeholder="Ej: Salud, Productividad, Ejercicio..."
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 font-semibold">Objetivo</label>
+            <textarea
+              value={formData.objective}
+              onChange={(e) =>
+                setFormData({ ...formData, objective: e.target.value })
+              }
+              className="w-full px-3 py-2 border rounded"
+              placeholder="Describe tu objetivo con este hábito..."
               required
             />
           </div>
@@ -143,7 +158,11 @@ const HabitsList = ({ userId }: HabitsListProps) => {
               className="p-4 border rounded-lg shadow hover:shadow-lg transition"
             >
               <h3 className="text-xl font-semibold mb-2">{habit.name}</h3>
-              <p className="text-gray-600 mb-4">{habit.description}</p>
+              <p className="text-sm text-gray-500 mb-1">
+                <span className="font-semibold">Categoría:</span>{" "}
+                {habit.category}
+              </p>
+              <p className="text-gray-600 mb-4">{habit.objective}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleDelete(habit._id)}
@@ -152,7 +171,10 @@ const HabitsList = ({ userId }: HabitsListProps) => {
                 >
                   Eliminar
                 </button>
-                <button className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+                <button
+                  onClick={() => navigate(`/habits/${habit._id}`)}
+                  className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                >
                   Ver Detalle
                 </button>
               </div>
