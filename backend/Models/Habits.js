@@ -5,7 +5,7 @@ const habitsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
+  category: {
     type: String,
     required: true,
   },
@@ -14,6 +14,11 @@ const habitsSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  objective: {
+    type: String,
+    required: true,
+  },
+
   //completions es un array de objetos con date y completed
   completions: [
     {

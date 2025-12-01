@@ -24,7 +24,6 @@ export const getAllUsers = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
-  res.status(200).json({ users });
 };
 export const getUserById = async (req, res) => {
   const { id } = req.params;

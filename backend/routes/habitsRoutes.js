@@ -7,6 +7,7 @@ import {
   updatehabitbyid,
   logHabitCompletion,
   getHabitStreak,
+  getHabitStats,
 } from "../controllers/habitsController.js";
 
 const router = express.Router();
@@ -18,4 +19,5 @@ router.delete("/delete/:id", deletehabitbyid);
 router.put("/update/:id", updatehabitbyid);
 router.post("/log-completion/:id", logHabitCompletion);
 router.get("/get-streak/:id", getHabitStreak);
+router.get("/get-stats/:id", getHabitStats); // Nuevo endpoint completo
 export default router;
