@@ -1,10 +1,10 @@
 import express from "express";
 import {
   createHabits,
-  getallhabits,
-  gethabitbyid,
-  deletehabitbyid,
-  updatehabitbyid,
+  getAllHabits,
+  getHabitById,
+  deleteHabitById,
+  updateHabitById,
   logHabitCompletion,
   getHabitStreak,
   getHabitStats,
@@ -13,10 +13,10 @@ import {
 const router = express.Router();
 
 router.post("/create", createHabits);
-router.get("/getall/:userId", getallhabits);
-router.get("/get/:id", gethabitbyid);
-router.delete("/delete/:id", deletehabitbyid);
-router.put("/update/:id", updatehabitbyid);
+router.get("/getall/:userId", getAllHabits);
+router.get("/get/:id", getHabitById);
+router.delete("/delete/:id", deleteHabitById);
+router.put("/update/:id", updateHabitById);
 router.post("/log-completion/:id", logHabitCompletion);
 router.get("/get-streak/:id", getHabitStreak);
 router.get("/get-stats/:id", getHabitStats); // Nuevo endpoint completo

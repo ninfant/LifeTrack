@@ -9,9 +9,9 @@ const connectDB = async () => {
       throw new Error("MONGO_URI is not defined");
     }
     await mongoose.connect(uri);
-    console.log("MongoDB connected");
+    console.debug("MongoDB connected");
   } catch (error) {
-    console.log(error);
+    console.error("Error connecting to MongoDB", error);
     process.exit(1);
   }
 };
