@@ -1,7 +1,8 @@
-import { useLogHabitCompletionMutation } from "../../../store/features/habits/habitsApi.ts";
+import { useLogCompletion } from "../../../hooks/useHabits";
 
 const HabitCalendar = ({ habit }: { habit: any }) => {
-  const [logCompletion, { isLoading }] = useLogHabitCompletionMutation();
+  const { mutateAsync: logCompletion, isPending: isLoading } =
+    useLogCompletion();
 
   // Handler para marcar día como completado
   const handleToggleDay = async (date: Date) => {
@@ -16,9 +17,9 @@ const HabitCalendar = ({ habit }: { habit: any }) => {
         id: habit._id,
         date: date.toISOString().split("T")[0], // Formato YYYY-MM-DD
         completed: !isCompleted, // Toggle: si está completado, desmarcar; si no, marcar
-      }).unwrap();
+      });
 
-      // RTK Query automáticamente refetch gracias a invalidatesTags
+      // React Query automáticamente refetch gracias a invalidateQueries
     } catch (err) {
       console.error("Error marcando día:", err);
       alert("Error al marcar el día");

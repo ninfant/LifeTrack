@@ -5,13 +5,13 @@ import HabitsList from "./pages/Habits/HabitsList";
 import HabitDetail from "./pages/Habits/HabitDetail";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
-import { useGetUserByIdQuery } from "./store/features/user/userApi.ts";
+import { useUserById } from "./hooks/useUsers";
 
 function App() {
   // Obtener userId de localStorage (o hardcodeado para pruebas)
   const userId = localStorage.getItem("userId") || "6911080679130dcd6c8c0d2b"; // Reemplaza con un userId real
 
-  const { data, isLoading } = useGetUserByIdQuery(userId);
+  const { data, isLoading } = useUserById(userId);
   const user = data?.user;
   if (isLoading) {
     return <div className="text-center">Cargando...</div>;

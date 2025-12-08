@@ -1,19 +1,22 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import { useGetHabitsQuery } from "../../store/features/habits/habitsApi";
+import { useHabits } from "../../hooks/useHabits";
 
 const Dashboard = () => {
   const userId = useSelector((state: RootState) => (state as any).user?.id);
-  const { data, isLoading } = useGetHabitsQuery(userId || "");
+  const { data, isLoading } = useHabits(userId || "");
 
   const habits = data?.allhabits || [];
   const totalHabits = habits.length;
+  // aqui se filtra los hábitos que se han completado hoy
   const completedToday = habits.filter((habit: any) => {
     const today = new Date().toDateString(); //Obtiene la fecha de hoy como string
     return habit.completions?.some(
-      (c: any) => new Date(c.date).toDateString() === today && c.completed
+      (completion: any) =>
+        new Date(completion.date).toDateString() === today &&
+        completion.completed // con && ambas condiciones deberian ser true para que el some retorne true sino sigue buscando en el array
     );
-  }).length;
+  }).length; // aqui se obtiene la cantidad de hábitos que se han completado hoy
 
   const stats = [
     { title: "Total de Hábitos", value: totalHabits, color: "text-green-600" },

@@ -2,10 +2,10 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  useGetHabitsQuery,
-  useCreateHabitMutation,
-  useDeleteHabitMutation,
-} from "../../store/features/habits/habitsApi";
+  useHabits,
+  useCreateHabit,
+  useDeleteHabit,
+} from "../../hooks/useHabits";
 
 interface HabitsListProps {
   userId: string;
@@ -19,14 +19,9 @@ const HabitsList = ({ userId }: HabitsListProps) => {
     category: "",
     objective: "",
   });
-
-  // Query: Obtener hábitos (automático)
-  const { data, isLoading, isError, error, refetch } =
-    useGetHabitsQuery(userId);
-
-  // Mutations: Crear, eliminar
-  const [createHabit, { isLoading: isCreating }] = useCreateHabitMutation();
-  const [deleteHabit, { isLoading: isDeleting }] = useDeleteHabitMutation();
+  const { data, isLoading, isError, error, refetch } = useHabits(userId);
+  const { mutateAsync: createHabit, isPending: isCreating } = useCreateHabit();
+  const { mutateAsync: deleteHabit, isPending: isDeleting } = useDeleteHabit();
 
   // Handler para crear hábito
   const handleCreate = async (e: FormEvent) => {
@@ -35,7 +30,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
       await createHabit({
         ...formData,
         userId,
-      }).unwrap();
+      });
 
       // Limpiar formulario y cerrar
       setFormData({ name: "", category: "", objective: "" });
@@ -50,7 +45,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
   const handleDelete = async (id: string) => {
     if (window.confirm("¿Estás seguro de eliminar este hábito?")) {
       try {
-        await deleteHabit(id).unwrap();
+        await deleteHabit(id);
       } catch (err) {
         console.error("Error eliminando hábito:", err);
         alert("Error al eliminar el hábito");

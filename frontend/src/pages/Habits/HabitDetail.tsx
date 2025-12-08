@@ -1,14 +1,11 @@
 import { useParams } from "react-router-dom";
-import {
-  useGetHabitByIdQuery,
-  useGetHabitStreakQuery,
-} from "../../store/features/habits/habitsApi";
-import HabitCalendar from "../../components/habits/HabitCalendar/HabitCalendar.js";
+import { useHabitById, useHabitStreak } from "../../hooks/useHabits";
+import HabitCalendar from "../../components/habits/HabitCalendar/HabitCalendar";
 
 const HabitDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: habit, isLoading, isError } = useGetHabitByIdQuery(id || "");
-  const { data: streak } = useGetHabitStreakQuery(id || "");
+  const { data: habit, isLoading, isError } = useHabitById(id || "");
+  const { data: streak } = useHabitStreak(id || "");
 
   if (isLoading) {
     return <div className="text-center py-12">Cargando hábito...</div>;
