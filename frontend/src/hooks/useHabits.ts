@@ -22,11 +22,10 @@ export const useHabitById = (id: string) => {
 // CREATE habit
 export const useCreateHabit = () => {
   const queryClient = useQueryClient();
-
+  //retorna un objeto con las propiedades: mutateAsync, isPending, isError, error, isSuccess
   return useMutation({
     mutationFn: habitsService.createHabit,
     onSuccess: (_, variables) => {
-      // Invalidar y refetch
       queryClient.invalidateQueries({ queryKey: ["habits", variables.userId] });
     },
   });

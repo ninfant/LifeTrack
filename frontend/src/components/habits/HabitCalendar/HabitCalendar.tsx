@@ -1,4 +1,5 @@
 import { useLogCompletion } from "../../../hooks/useHabits";
+import * as helpers from "../../../helpers/habitHelpers";
 
 const HabitCalendar = ({ habit }: { habit: any }) => {
   const { mutateAsync: logCompletion, isPending: isLoading } =
@@ -7,15 +8,18 @@ const HabitCalendar = ({ habit }: { habit: any }) => {
   // Handler para marcar día como completado
   const handleToggleDay = async (date: Date) => {
     try {
+      const normalizedDate = helpers.normalizeDate(date);
       // Verificar si el día ya está completado
-      const isCompleted = habit.completions?.some(
-        (c: any) =>
-          new Date(c.date).toDateString() === date.toDateString() && c.completed
-      );
+      const isCompleted = habit.completions?.some((c: any) => {
+        const completionDate = helpers.normalizeDate(new Date(c.date));
+        return (
+          completionDate.getTime() === normalizedDate.getTime() && c.completed
+        );
+      });
 
       await logCompletion({
         id: habit._id,
-        date: date.toISOString().split("T")[0], // Formato YYYY-MM-DD
+        date: helpers.formatDateToYYYYMMDD(date), // Formato YYYY-MM-DD sin problemas de zona horaria
         completed: !isCompleted, // Toggle: si está completado, desmarcar; si no, marcar
       });
 
@@ -41,11 +45,14 @@ const HabitCalendar = ({ habit }: { habit: any }) => {
       <div className="grid grid-cols-7 gap-2">
         {days.map((day) => {
           const date = new Date(today.getFullYear(), today.getMonth(), day);
-          const isCompleted = habit.completions?.some(
-            (c: any) =>
-              new Date(c.date).toDateString() === date.toDateString() &&
+          const normalizedDate = helpers.normalizeDate(date);
+          const isCompleted = habit.completions?.some((c: any) => {
+            const completionDate = helpers.normalizeDate(new Date(c.date));
+            return (
+              completionDate.getTime() === normalizedDate.getTime() &&
               c.completed
-          );
+            );
+          });
 
           return (
             <button

@@ -10,7 +10,7 @@ const HabitDetail = () => {
   if (isLoading) {
     return <div className="text-center py-12">Cargando hábito...</div>;
   }
-
+  //El backend retorna un objeto con habitbyid dentro
   if (isError || !habit?.habitbyid) {
     return (
       <div className="text-center py-12">
