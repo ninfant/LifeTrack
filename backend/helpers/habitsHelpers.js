@@ -33,15 +33,21 @@ export const calculateStreaks = (completedDates) => {
   const todayTime = today.getTime();
 
   // Current Streak
+  // Convertir completedDates a un Set para búsqueda rápida
+  const completedDatesSet = new Set(completedDates);
+
   let currentStreak = 0;
   let checkDate = todayTime;
+  const oneDay = 86400000; // milisegundos en un día
 
-  for (const completedTime of completedDates) {
-    const daysDiff = (checkDate - completedTime) / (1000 * 60 * 60 * 24);
-    if (daysDiff === 0) {
+  // Verificar día por día hacia atrás desde hoy
+  while (true) {
+    if (completedDatesSet.has(checkDate)) {
+      // Este día está completado, incrementar streak
       currentStreak++;
-      checkDate -= 86400000;
-    } else if (daysDiff > 0) {
+      checkDate -= oneDay; // Ir al día anterior
+    } else {
+      // Este día NO está completado, romper el streak
       break;
     }
   }
@@ -65,7 +71,7 @@ export const calculateStreaks = (completedDates) => {
   return { current: currentStreak, longest: longestStreak };
 };
 
-// Calculate progress (weekly or monthly)
+// Calculate progress (weekly or monthly), Cuenta cuántos días se completaron, Calcula el porcentaje de completitud
 export const calculateProgress = (allCompletions, period) => {
   const today = normalizeDate(new Date());
   const todayTime = today.getTime();
