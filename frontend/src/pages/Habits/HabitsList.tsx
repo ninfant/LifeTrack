@@ -36,19 +36,19 @@ const HabitsList = ({ userId }: HabitsListProps) => {
       setFormData({ name: "", category: "", objective: "" });
       setShowForm(false);
     } catch (err) {
-      console.error("Error creando hábito:", err);
-      alert("Error al crear el hábito");
+      console.error("Error creating habit:", err);
+      alert("Error creating habit");
     }
   };
 
   // Handler para eliminar
   const handleDelete = async (id: string) => {
-    if (window.confirm("¿Estás seguro de eliminar este hábito?")) {
+    if (window.confirm("Are you sure you want to delete this habit?")) {
       try {
         await deleteHabit(id);
       } catch (err) {
-        console.error("Error eliminando hábito:", err);
-        alert("Error al eliminar el hábito");
+        console.error("Error deleting habit:", err);
+        alert("Error deleting habit");
       }
     }
   };
@@ -57,7 +57,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="text-lg">Cargando hábitos...</div>
+        <div className="text-lg">Loading habits...</div>
       </div>
     );
   }
@@ -67,13 +67,13 @@ const HabitsList = ({ userId }: HabitsListProps) => {
     return (
       <div className="flex flex-col items-center justify-center h-64">
         <div className="text-red-500 mb-4">
-          Error: {(error as any)?.data?.message || "Error al cargar hábitos"}
+          Error: {(error as any)?.data?.message || "Error loading habits"}
         </div>
         <button
           onClick={() => refetch()}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          Reintentar
+          Try again
         </button>
       </div>
     );
@@ -82,12 +82,12 @@ const HabitsList = ({ userId }: HabitsListProps) => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Mis Hábitos</h1>
+        <h1 className="text-2xl font-bold">My Habits</h1>
         <button
           onClick={() => setShowForm(!showForm)}
           className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
-          {showForm ? "Cancelar" : "+ Nuevo Hábito"}
+          {showForm ? "Cancel" : "+ New Habit"}
         </button>
       </div>
 
@@ -98,7 +98,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
           className="mb-6 p-4 bg-gray-100 rounded-lg"
         >
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Nombre</label>
+            <label className="block mb-2 font-semibold">Name</label>
             <input
               type="text"
               value={formData.name}
@@ -110,7 +110,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Categoría</label>
+            <label className="block mb-2 font-semibold">Category</label>
             <input
               type="text"
               value={formData.category}
@@ -118,19 +118,19 @@ const HabitsList = ({ userId }: HabitsListProps) => {
                 setFormData({ ...formData, category: e.target.value })
               }
               className="w-full px-3 py-2 border rounded"
-              placeholder="Ej: Salud, Productividad, Ejercicio..."
+              placeholder="Ej: Health, Productivity, Exercise..."
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Objetivo</label>
+            <label className="block mb-2 font-semibold">Objective</label>
             <textarea
               value={formData.objective}
               onChange={(e) =>
                 setFormData({ ...formData, objective: e.target.value })
               }
               className="w-full px-3 py-2 border rounded"
-              placeholder="Describe tu objetivo con este hábito..."
+              placeholder="Describe your objective with this habit..."
               required
             />
           </div>
@@ -139,7 +139,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
             disabled={isCreating}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
           >
-            {isCreating ? "Creando..." : "Crear Hábito"}
+            {isCreating ? "Creating..." : "Create Habit"}
           </button>
         </form>
       )}
@@ -154,7 +154,7 @@ const HabitsList = ({ userId }: HabitsListProps) => {
             >
               <h3 className="text-xl font-semibold mb-2">{habit.name}</h3>
               <p className="text-sm text-gray-500 mb-1">
-                <span className="font-semibold">Categoría:</span>{" "}
+                <span className="font-semibold">Category:</span>{" "}
                 {habit.category}
               </p>
               <p className="text-gray-600 mb-4">{habit.objective}</p>
@@ -164,20 +164,20 @@ const HabitsList = ({ userId }: HabitsListProps) => {
                   disabled={isDeleting}
                   className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 disabled:opacity-50"
                 >
-                  Eliminar
+                  Delete
                 </button>
                 <button
                   onClick={() => navigate(`/habits/${habit._id}`)}
                   className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
                 >
-                  Ver Detalle
+                  View Details
                 </button>
               </div>
             </div>
           ))
         ) : (
           <div className="col-span-full text-center text-gray-500 py-8">
-            No tienes hábitos aún. ¡Crea uno!
+            You don't have any habits yet. Create one!
           </div>
         )}
       </div>

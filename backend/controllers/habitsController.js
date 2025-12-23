@@ -105,25 +105,73 @@ export const logHabitCompletion = async (req, res) => {
       return cDate.getTime() === completionDate.getTime();
     }); //existingIndex = el indice del registro que ya existe o -1 si no existe
 
+    const completionValue = completed !== undefined ? completed : true;
+
+    // Modificar el array en memoria
     if (existingIndex !== -1) {
-      habit.completions[existingIndex].completed = completed; // Si existe, actualizar
+      // Si existe, actualizar
+      habit.completions[existingIndex].completed = completionValue;
+      console.log("Actualizando completion existente:", {
+        index: existingIndex,
+        date: completionDate,
+        completed: completionValue,
+      });
     } else {
       // Si no existe, agregar nuevo
       habit.completions.push({
         date: completionDate,
-        completed: completed !== undefined ? completed : true,
-      }); /** si el registro SI se envia(!== undefined ), es decir ya sea true o false la variable completed lo toma,
-       si no se envio, se completa el registro por defecto con true, esto es para que se pueda marcar el día como completado 
-      * */
+        completed: completionValue,
+      });
+      console.log("Agregando nuevo completion:", {
+        date: completionDate,
+        completed: completionValue,
+      });
     }
 
-    await habit.save(); //guardamos el habit en la base de datos
+    // Actualizar solo el array de completions usando findByIdAndUpdate
+    // runValidators: false evita validar campos requeridos que no estamos actualizando
+    const updatedHabit = await Habits.findByIdAndUpdate(
+      id,
+      { $set: { completions: habit.completions } },
+      {
+        new: true, // Retornar el documento actualizado
+        runValidators: false, // No validar campos requeridos del documento principal
+      }
+    );
 
-    res
-      .status(200)
-      .json({ message: "Habit completion logged successfully", habit }); //respuesta exitosa
+    if (!updatedHabit) {
+      return res.status(404).json({ message: "Habit not found" });
+    }
+
+    console.log("Habit actualizado exitosamente");
+
+    res.status(200).json({
+      message: "Habit completion logged successfully",
+      habit: updatedHabit,
+    }); //respuesta exitosa
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error }); //respuesta de error
+    console.error("Error en logHabitCompletion:", error);
+    console.error("Error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    });
+
+    // Si es un error de validación de Mongoose, dar más detalles
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        message: "Validation error",
+        error: error.message,
+        details: error.errors,
+      });
+    }
+
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+      errorName: error.name,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    }); //respuesta de error
   }
 };
 
