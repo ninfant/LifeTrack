@@ -6,6 +6,7 @@ import HabitDetail from "./pages/Habits/HabitDetail";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 import { useUserById } from "./hooks/useUsers";
+import "./index.css";
 
 function App() {
   // Obtener userId de localStorage (o hardcodeado para pruebas)
