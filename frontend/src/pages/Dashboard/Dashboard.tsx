@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { useHabits } from "../../hooks/useHabits";
+import Container from "../../components/layout/Container";
 
 const Dashboard = () => {
-  const userId = useSelector((state: RootState) => (state as any).user?.id);
+  const userId = useSelector((state: RootState) => state.user.id);
   const { data, isLoading } = useHabits(userId || "");
 
   const habits = data?.allhabits || [];
@@ -33,7 +34,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-6">
+    <Container>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -61,7 +62,7 @@ const Dashboard = () => {
           </a>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 

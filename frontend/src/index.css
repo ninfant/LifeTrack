@@ -9,11 +9,13 @@
 body {
   margin: 0;
   width: 100%;
-  min-height: 100vh;
+  /* dvh, not vh: in Safari (especially iOS) 100vh includes the URL bar,
+     so the page overflows and jumps while scrolling */
+  min-height: 100dvh;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
 }

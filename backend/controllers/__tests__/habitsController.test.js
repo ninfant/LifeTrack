@@ -31,14 +31,16 @@ describe("createHabits", () => {
   it("debe crear un hábito exitosamente", async () => {
     req.body = {
       name: "Hacer ejercicio",
-      description: "30 minutos diarios",
+      category: "Salud",
+      objective: "30 minutos diarios",
       userId: "123",
     };
     //respuesta simulada de la BD
     const mockHabit = {
       _id: "456",
       name: req.body.name,
-      description: req.body.description,
+      category: req.body.category,
+      objective: req.body.objective,
       userId: req.body.userId,
     };
     //hace que el spy devuelva una promesa resuelta
@@ -48,7 +50,8 @@ describe("createHabits", () => {
     //verifica que el spy haya sido llamado con los argumentos correctos
     expect(createSpy).toHaveBeenCalledWith({
       name: req.body.name,
-      description: req.body.description,
+      category: req.body.category,
+      objective: req.body.objective,
       userId: req.body.userId,
     });
     //verifica que el status y el json hayan sido llamados con los argumentos correctos
@@ -61,7 +64,7 @@ describe("createHabits", () => {
   });
 
   it("debe retornar 400 si falta name", async () => {
-    req.body = { description: "test", userId: "123" };
+    req.body = { category: "Salud", objective: "test", userId: "123" };
 
     await createHabits(req, res);
 

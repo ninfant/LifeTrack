@@ -19,7 +19,8 @@ export const createHabits = async (req, res) => {
       .status(201)
       .json({ message: "new habit created successfully", newhabit });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -34,7 +35,8 @@ export const getAllHabits = async (req, res) => {
       .status(200)
       .json({ message: "All habits fetched successfully", allhabits });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -47,7 +49,8 @@ export const getHabitById = async (req, res) => {
     }
     res.status(200).json({ message: "Habit found successfully", habitbyid });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 export const deleteHabitById = async (req, res) => {
@@ -61,7 +64,8 @@ export const deleteHabitById = async (req, res) => {
       .status(200)
       .json({ message: "Habit deleted successfully", deletedhabit });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -81,7 +85,8 @@ export const updateHabitById = async (req, res) => {
       .status(200)
       .json({ message: "Habit updated successfully", updatedhabit });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -111,18 +116,9 @@ export const logHabitCompletion = async (req, res) => {
     if (existingIndex !== -1) {
       // Si existe, actualizar
       habit.completions[existingIndex].completed = completionValue;
-      console.log("Actualizando completion existente:", {
-        index: existingIndex,
-        date: completionDate,
-        completed: completionValue,
-      });
     } else {
       // Si no existe, agregar nuevo
       habit.completions.push({
-        date: completionDate,
-        completed: completionValue,
-      });
-      console.log("Agregando nuevo completion:", {
         date: completionDate,
         completed: completionValue,
       });
@@ -143,35 +139,23 @@ export const logHabitCompletion = async (req, res) => {
       return res.status(404).json({ message: "Habit not found" });
     }
 
-    console.log("Habit actualizado exitosamente");
-
     res.status(200).json({
       message: "Habit completion logged successfully",
       habit: updatedHabit,
     }); //respuesta exitosa
   } catch (error) {
-    console.error("Error en logHabitCompletion:", error);
-    console.error("Error details:", {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-    });
+    // Details stay in the server log, they never travel to the client
+    console.error("Error in logHabitCompletion:", error);
 
-    // Si es un error de validación de Mongoose, dar más detalles
+    // For a Mongoose validation error the message is useful to the client
     if (error.name === "ValidationError") {
       return res.status(400).json({
         message: "Validation error",
         error: error.message,
-        details: error.errors,
       });
     }
 
-    res.status(500).json({
-      message: "Internal server error",
-      error: error.message,
-      errorName: error.name,
-      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
-    }); //respuesta de error
+    res.status(500).json({ message: "Internal server error" }); //respuesta de error
   }
 };
 
@@ -194,7 +178,8 @@ export const getHabitStreak = async (req, res) => {
       habitId: id,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -225,6 +210,7 @@ export const getHabitStats = async (req, res) => {
       overall,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

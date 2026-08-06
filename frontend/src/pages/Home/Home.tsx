@@ -1,12 +1,12 @@
 const Home = () => {
   return (
-    <div className="w-full bg-gradient-to-br from-green-50 via-white to-blue-50 flex flex-col gap-24 pt-20 md:pt-32">
+    <div className="flex w-full flex-col bg-gradient-to-br from-green-50 via-white to-blue-50">
       {/* Hero */}
-      <section className="pt-52 md:pt-64 pb-16 md:pb-24">
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className=" mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <section className="py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             {/* Left */}
-            <div className="text-center lg:text-center">
+            <div className="text-center lg:text-left">
               <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
                 Welcome to <span className="text-green-600">LifeTrack</span>
               </h1>
@@ -66,9 +66,9 @@ const Home = () => {
         </div>
       </section>
       {/* Features */}
-      <section className="pt-32 md:pt-40 pb-10 md:pb-14">
-        <div className="max-w-8xl mx-auto px-6">
-          <div className="flex flex-col items-center gap-6">
+      <section className="pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center gap-4">
             <h2 className="text-3xl md:text-5xl font-bold text-center text-gray-900">
               Why LifeTrack?
             </h2>
@@ -79,7 +79,7 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-8xl mx-auto">
+            <div className="mt-6 grid w-full grid-cols-1 gap-8 md:grid-cols-3">
               {[
                 {
                   icon: "📊",
@@ -99,17 +99,15 @@ const Home = () => {
               ].map((f) => (
                 <div
                   key={f.title}
-                  className="bg-white/80 backdrop-blur rounded-3xl p-12 md:p-16 border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center flex flex-col items-center justify-center min-h-[320px]"
+                  className="flex flex-col items-center rounded-3xl border border-gray-200 bg-white/80 p-8 text-center shadow-lg backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
                 >
-                  <div className="mx-auto mb-6 flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 text-4xl md:text-5xl shadow-md">
+                  <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 text-3xl shadow-md">
                     {f.icon}
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+                  <h3 className="mb-2 text-xl font-bold text-gray-900">
                     {f.title}
                   </h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed text-center max-w-sm mt-6">
-                    {f.desc}
-                  </p>
+                  <p className="leading-relaxed text-gray-600">{f.desc}</p>
                 </div>
               ))}
             </div>

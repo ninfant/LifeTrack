@@ -7,7 +7,7 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-md">
-      <nav className="max-w-8xl mx-auto px-10 py-10 mb-8 ml-8">
+      <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold text-green-600">
             LifeTrack
@@ -57,7 +57,6 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <div className="h-20 bg-gradient-to-br from-green-50"></div>
     </header>
   );
 };
